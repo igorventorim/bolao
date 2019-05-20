@@ -1,0 +1,90 @@
+{% load i18n %}
+{% spaceless %}
+<div style="width:auto;height:auto;padding:10px;font-size:13px;">
+	<h2>{{ jogo.primeirotime.nome }} x {{ jogo.segundotime.nome }}</h2>
+	<br />
+	<form action="#" method="POST" enctype="multipart/form-data">
+		<input type="hidden" name="idJogo" id="idJogo" value="{{ idJogo }}" />
+		<div>
+			<strong> {{ jogo.primeirotime.nome }} </strong>
+			<input type="text" style="width:35px;" id="resultadoprimeirotime" name="resultadoprimeirotime" value="" />
+			&nbsp;&nbsp;<strong>X</strong>&nbsp;&nbsp;
+			<input type="text" style="width:35px;" id="resultadosegundotime" name="resultadosegundotime" value="" />
+			<strong> {{ jogo.segundotime.nome }} </strong>
+		</div>
+		<br /><br />
+
+		<div>
+		<label>
+			Usuário:
+			<select id="usuario">
+				<option value="">-- Selecione um usuário --</option>
+				{% for usuario in usuarios %}
+				<option value="{{ usuario.id }}">{{ usuario.nome }}</option>
+				{% endfor %}
+			</select>
+		</label>
+		
+			<br /><br />
+
+			<label>
+				Senha:  <input type="password" style="width:90px; margin-bottom:20px;" id="senha" name="senha" value="" />
+			</label>
+		</div>
+
+		<br /><br />
+		
+		
+		<button id="btnSubmitAposta" name="btnSubmitAposta" class="cupid-green">Apostar</button>
+	</form>
+</div>
+<script type="text/javascript">
+	$('#resultadoprimeirotime').mask("9");
+	$('#resultadosegundotime').mask("9");
+	
+	$("#btnSubmitAposta").on("click", function() {
+		var idJogo = $('#idJogo').val();
+		var idUsuario = $('#usuario').val();
+		var senha = $('#senha').val();
+		var resultadoprimeirotime = $('#resultadoprimeirotime').val();
+		var resultadosegundotime = $('#resultadosegundotime').val();
+		
+		if(!isNumber(idUsuario)) {
+			alert('Selecione um panaca!');
+			return false;
+		}
+		
+		if(!isNumber(resultadoprimeirotime) || !isNumber(resultadosegundotime)) {
+			alert('Favor inserir resultados para os times!');
+			return false;		
+		}
+		
+		if(senha == ''){
+			alert('Favor informar sua senha!');
+			return false;
+		}
+		// Salva o registro!
+		$.ajax({
+			async:false
+			,type:'POST'
+			,url:'./salvar/'
+			,dataType:'json'
+			,data:{
+				'idJogo':idJogo
+				,'idUsuario':idUsuario
+				,'resultadoprimeirotime':resultadoprimeirotime
+				,'resultadosegundotime':resultadosegundotime
+				,'senha':senha
+			}
+			,success:function(data) {
+				alert(data.message);
+				if(data.success) {
+					loadAposta(idJogo);
+					$("body").jWindow('close');
+				}
+			}
+		});
+		return false;
+	});
+</script>
+{% endspaceless %}

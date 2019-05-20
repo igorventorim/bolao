@@ -1,0 +1,108 @@
+{% load i18n %}
+{% spaceless %}
+<div id="ranking">
+	<table class="formated" align="center">
+		<tr>
+			<td colspan="9" class="tableTitle">
+				Ranking
+			</td>
+		</tr>
+		<tr>
+			<th style="text-align:center;"> Pos </th>
+			<th style="text-align:center;"> Jogador </th>
+			<th style="text-align:center;"> Pts </th>
+			<th style="text-align:center;"> Jogos </th>
+			<th style="text-align:center;"> Média </th>
+			<th style="text-align:center;"> Aprov.%</th>
+			<th style="text-align:center;"> Vitórias </th>
+			<th style="text-align:center;"> Vexames </th>
+			<th style="text-align:center;"> Zeros </th>
+		</tr>
+	{% for usuario in usuarios %}
+		<tr style="background-color:{% cycle 'white' '#f2f2f2' %}">
+			<td style="text-align:center;">
+				{{ usuario.ordem }}
+			</td>
+			<td>
+				<strong>{{ usuario.nome }}</strong>
+			</td>
+			<td style="text-align:center;">
+				{{ usuario.ranking }}
+			</td>
+			<td style="text-align:center;">
+				{{ usuario.jogos }}
+			</td>
+			<td style="text-align:center;">
+				0
+			</td>
+			<td style="text-align:center;">
+				{{ usuario.aproveitamento }}
+			</td>
+			<td style="text-align:center;">
+				{{ usuario.vitorias }}
+			</td>
+			<td style="text-align:center;">
+				{{ usuario.vexames }}
+			</td>
+			<td style="text-align:center;">
+				{{ usuario.zeros }}
+			</td>
+	{% endfor %}
+	</table>
+
+
+	<br/><br/>
+
+
+	<table class="formated" align="center">
+		<tr>
+			<td colspan="3" class="tableTitle">
+				Bola Cheia
+			</td>
+		</tr>
+		<tr>
+			<th style="text-align:center;"> Rodada </th>
+			<th style="text-align:center;"> Nome </th>
+			<th style="text-align:center;"> Pontos </th>
+		</tr>
+	{% for usuario in usuarios %}
+		<tr style="background-color:{% cycle 'white' '#f2f2f2' %}">
+			<td style="text-align:center;">
+				{{ usuario.ordem }}
+			</td>
+			<td>
+				<strong>{{ usuario.nome }}</strong>
+			</td>
+			<td style="text-align:center;">
+				{{ usuario.ranking }}
+			</td>
+	{% endfor %}
+	</table>
+
+	<br/><br/>
+	<table class="formated" align="center">
+		<tr>
+			<td colspan="3" class="tableTitle">
+				Bola Murcha
+			</td>
+		</tr>
+		<tr>
+			<th style="text-align:center;"> Rodada </th>
+			<th style="text-align:center;"> Nome </th>
+			<th style="text-align:center;"> Pontos </th>
+		</tr>
+	{% for usuario in usuarios %}
+		<tr style="background-color:{% cycle 'white' '#f2f2f2' %}">
+			<td style="text-align:center;">
+				{{ usuario.ordem }}
+			</td>
+			<td>
+				<strong>{{ usuario.nome }}</strong>
+			</td>
+			<td style="text-align:center;">
+				{{ usuario.ranking }}
+			</td>
+	{% endfor %}
+	</table>
+</div>
+{% endspaceless %}
