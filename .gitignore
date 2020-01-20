@@ -122,3 +122,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+static/
+.vscode/
+bolao_django.log
+bolao_gunicorn.log
+

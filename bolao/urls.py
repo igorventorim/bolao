@@ -1,17 +1,17 @@
+from apostas import views as ap_views
+from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 
 from django.contrib import admin
 admin.autodiscover()
 
-from django.conf import settings
-from apostas import views as ap_views
 
 urlpatterns = [
     # Grapelli
     url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
     # Admin
-    url(r'^admin/', include(admin.site.urls)),  # admin site
+    url(r'^admin/', admin.site.urls),  # admin site
     # Sistema
     url('^$', ap_views.index),
     url('^jogo/', ap_views.jogo),

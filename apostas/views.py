@@ -4,7 +4,7 @@ import json
 
 from django.conf import settings
 from django.http import HttpResponse
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render, redirect
 from django.db import connection, transaction
 from .models import Time, Jogo, Usuario, Aposta
 from classes.serializer import Serialize
@@ -26,15 +26,17 @@ def retorna(message=None):
 
 
 def index(request):
-    return render_to_response('home/index.html', {'language': get_language(), 'STATIC_URL': settings.STATIC_URL})
+    return render(request, 'home/index.html', {'language': get_language(), 'STATIC_URL': settings.STATIC_URL})
 
 
 def jogo(request):
     jogos = Jogo.objects.select_related().all().exclude(calculado=True)
     for jogo in jogos:
-        jogo.apostas = Aposta.objects.filter(jogo__pk=jogo.id, jogo__calculado=False).order_by("usuario__nome")
-    return render_to_response('home/jogo.html',
-                              {'language': get_language(), 'STATIC_URL': settings.STATIC_URL, 'jogos': jogos})
+        jogo.apostas = Aposta.objects.filter(
+            jogo__pk=jogo.id, jogo__calculado=False).order_by("usuario__nome")
+    return render(request, 'home/jogo.html',
+                  {'language': get_language(), 'STATIC_URL': settings.STATIC_URL, 'jogos': jogos})
+
 
 def ranking(request):
     usuarios = Usuario.objects.all().order_by("-ranking")
@@ -45,28 +47,30 @@ def ranking(request):
         usuario.vitorias = 0
         usuario.vexames = 0
         usuario.zeros = 0
-    return render_to_response('home/ranking.html',
-                              {'language': get_language(), 'STATIC_URL': settings.STATIC_URL, 'usuarios': usuarios})
+    return render(request, 'home/ranking.html',
+                  {'language': get_language(), 'STATIC_URL': settings.STATIC_URL, 'usuarios': usuarios})
 
 
 def pontuacao(request):
     jogos = list(Jogo.objects.select_related().all().exclude(calculado=False))
     for jogo in jogos:
-        jogo.apostas = Aposta.objects.filter(jogo__pk=jogo.id, jogo__calculado=True).order_by("usuario__nome")
-    return render_to_response('home/pontuacao.html',
-                              {'language': get_language(), 'STATIC_URL': settings.STATIC_URL, 'jogos': jogos})
+        jogo.apostas = Aposta.objects.filter(
+            jogo__pk=jogo.id, jogo__calculado=True).order_by("usuario__nome")
+    return render(request, 'home/pontuacao.html',
+                  {'language': get_language(), 'STATIC_URL': settings.STATIC_URL, 'jogos': jogos})
 
 
 def apostas(request):
     apostas = None
     try:
         id_jogo = int(request.POST.get("idJogo", 0))
-        apostas = Aposta.objects.filter(jogo__pk=id_jogo).order_by("usuario__nome")
+        apostas = Aposta.objects.filter(
+            jogo__pk=id_jogo).order_by("usuario__nome")
     except ValueError:
         pass
-    return render_to_response('home/apostas.html',
-                              {'idJogo': id_jogo, 'language': get_language(), 'STATIC_URL': settings.STATIC_URL,
-                               'apostas': apostas})
+    return render(request, 'home/apostas.html',
+                  {'idJogo': id_jogo, 'language': get_language(), 'STATIC_URL': settings.STATIC_URL,
+                   'apostas': apostas})
 
 
 def formulario(request):
@@ -78,27 +82,31 @@ def formulario(request):
     except ValueError:
         pass
     usuarios = Usuario.objects.filter(ativo=True).order_by('nome')
-    return render_to_response('home/formulario.html',
-                              {'language': get_language(), 'STATIC_URL': settings.STATIC_URL, 'usuarios': usuarios,
-                               'jogo': jogo, 'idJogo': id_jogo})
+    return render(request, 'home/formulario.html',
+                  {'language': get_language(), 'STATIC_URL': settings.STATIC_URL, 'usuarios': usuarios,
+                   'jogo': jogo, 'idJogo': id_jogo})
 
 
 @transaction.atomic
 def salvar(request):
-    message = {'success': False, 'message': _trans("Erro ao salvar aposta, tente novamente!")}
+    message = {'success': False, 'message': _trans(
+        "Erro ao salvar aposta, tente novamente!")}
     try:
         id_jogo = int(request.POST.get("idJogo", 0))
         id_usuario = int(request.POST.get("idUsuario", 0))
-        resultado_primeiro_time = int(request.POST.get("resultadoprimeirotime", 0))
-        resultado_segundo_time = int(request.POST.get("resultadosegundotime", 0))
-        senha = request.POST.get("senha",None)
+        resultado_primeiro_time = int(
+            request.POST.get("resultadoprimeirotime", 0))
+        resultado_segundo_time = int(
+            request.POST.get("resultadosegundotime", 0))
+        senha = request.POST.get("senha", None)
     except ValueError:
         message['message'] = _trans("Erro ao recuperar parâmetros!")
-    
+
     try:
-        usuario = Usuario.objects.filter(pk=id_usuario,senha=senha)
+        usuario = Usuario.objects.filter(pk=id_usuario, senha=senha)
         if len(usuario) > 0:
-            existe = Aposta.objects.filter(jogo__pk=id_jogo, usuario__pk=id_usuario)
+            existe = Aposta.objects.filter(
+                jogo__pk=id_jogo, usuario__pk=id_usuario)
             if len(existe) == 0:
                 jogo = Jogo.objects.get(pk=id_jogo)
                 usuario = Usuario.objects.get(pk=id_usuario)
@@ -112,18 +120,20 @@ def salvar(request):
                     aposta.save()
                     if aposta.id > 0:
                         message['success'] = True
-                        message['message'] = _trans("Aposta salva com sucesso! Boa sorte...")
+                        message['message'] = _trans(
+                            "Aposta salva com sucesso! Boa sorte...")
                 else:
                     message['message'] = _trans(
-                    "Ow maluco, Deu mole, já passou do horário de apostas para este jogo!")
+                        "Ow maluco, Deu mole, já passou do horário de apostas para este jogo!")
             else:
                 message['message'] = _trans(
                     "Ow maluco, vc ta tentando fazer aposta em um jogo no qual ja apostou! Prestenção retardado!")
         else:
             message['message'] = _trans(
-                    "Ow maluco, essa senha está errada! Prestenção no que cê digita rapá!") 
+                "Ow maluco, essa senha está errada! Prestenção no que cê digita rapá!")
     except:
-        message['message'] = _trans("Erro ao executar a operação para salvar aposta!")
+        message['message'] = _trans(
+            "Erro ao executar a operação para salvar aposta!")
     return retorna(message)
 
 
@@ -131,8 +141,8 @@ def form_calcular(request):
     data = datetime.now()
     jogos = Jogo.objects.select_related().all().exclude(calculado=True).exclude(
         data__gt=datetime(data.year, data.month, data.day))
-    return render_to_response('home/formulario-calcular.html',
-                              {'language': get_language(), 'STATIC_URL': settings.STATIC_URL, 'jogos': jogos})
+    return render(request, 'home/formulario-calcular.html',
+                  {'language': get_language(), 'STATIC_URL': settings.STATIC_URL, 'jogos': jogos})
 
 
 @transaction.atomic

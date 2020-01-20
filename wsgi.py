@@ -13,15 +13,15 @@ middleware here, or combine a Django application with an application of another
 framework.
 
 """
-import os, sys
-
-sys.path.append('/home/igor/Desktop/BOLAO/BolaoSimples-master')
-sys.path.append('/home/igor/Desktop/BOLAO/BolaoSimples-master/bolao')
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bolao.settings")
-
+# from whitenoise.django import DjangoWhiteNoise
 from django.core.wsgi import get_wsgi_application
-from whitenoise.django import DjangoWhiteNoise
+import os
+import sys
+
+sys.path.append('/home/igor/Documents/bolao')
+sys.path.append('/home/igor/Documents/bolao/bolao')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bolao.settings")
 
 
 application = get_wsgi_application()
-application = DjangoWhiteNoise(application)
+# application = DjangoWhiteNoise(application)

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # Django settings for rndev project.
-#funcao anonima que retorna o caminho completo de pastas dentro do projeto 
+# funcao anonima que retorna o caminho completo de pastas dentro do projeto
 import os
-LOCAL_INSTANCE = lambda *args:os.path.join(os.path.dirname(__file__), *args)
+LOCAL_INSTANCE = lambda *args: os.path.join(os.path.dirname(__file__), *args)
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -23,7 +23,7 @@ DATABASES = {
         'NAME': 'bolao',
         'USER': 'bolao',
         'PASSWORD': 'bolao123',
-        'HOST': 'artmila.com.br',
+        'HOST': 'ventorim.ddns.net',
         'PORT': '5432',
     }
 }
@@ -102,7 +102,19 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '1m#0fc9&amp;^ywhzbm8u7)b^d*bo)%yr*ubnnb1lt3j78)dww2+e3'
 
-MIDDLEWARE_CLASSES = (
+# MIDDLEWARE_CLASSES = (
+#     'django.middleware.common.CommonMiddleware',
+#     'django.contrib.sessions.middleware.SessionMiddleware',
+#     # 'django.middleware.csrf.CsrfViewMiddleware',
+#     'django.contrib.auth.middleware.AuthenticationMiddleware',
+#     'django.contrib.messages.middleware.MessageMiddleware',
+#     # Uncomment the next line for simple clickjacking protection:
+#     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+#     'django.middleware.security.SecurityMiddleware',
+#     'whitenoise.middleware.WhiteNoiseMiddleware',
+# )
+
+MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
@@ -110,7 +122,10 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # ...
+]
 
 ROOT_URLCONF = 'bolao.urls'
 
@@ -120,7 +135,7 @@ WSGI_APPLICATION = 'wsgi.application'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [LOCAL_INSTANCE('templates'),],
+        'DIRS': [LOCAL_INSTANCE('templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -156,8 +171,8 @@ LOGGING = {
             'class': 'logging.StreamHandler',
         },
         'logfile': {
-            'level':'DEBUG',
-            'class':'logging.FileHandler',
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
             'filename': "bolao_django.log",
         },
     },
