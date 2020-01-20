@@ -13,15 +13,12 @@ middleware here, or combine a Django application with an application of another
 framework.
 
 """
-# from whitenoise.django import DjangoWhiteNoise
 from django.core.wsgi import get_wsgi_application
 import os
 import sys
 
-sys.path.append('/home/igor/Documents/bolao')
-sys.path.append('/home/igor/Documents/bolao/bolao')
+# sys.path.append('.')
+sys.path.append('/bolao')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bolao.settings")
 
-
 application = get_wsgi_application()
-# application = DjangoWhiteNoise(application)
