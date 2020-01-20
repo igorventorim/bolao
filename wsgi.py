@@ -17,8 +17,10 @@ from django.core.wsgi import get_wsgi_application
 import os
 import sys
 
-# sys.path.append('/app')
-# sys.path.append('/bolao')
+path = os.getcwd()
+sys.path.append(path)
+sys.path.append(path+'/bolao')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bolao.settings")
 
 application = get_wsgi_application()
+# application = DjangoWhiteNoise(application)
