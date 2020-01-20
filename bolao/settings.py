@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Django settings for rndev project.
 # funcao anonima que retorna o caminho completo de pastas dentro do projeto
+import django_heroku
 import os
 LOCAL_INSTANCE = lambda *args: os.path.join(os.path.dirname(__file__), *args)
 

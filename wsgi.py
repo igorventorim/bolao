@@ -17,8 +17,8 @@ from django.core.wsgi import get_wsgi_application
 import os
 import sys
 
-# sys.path.append('.')
-sys.path.append('/bolao')
+# sys.path.append('/app')
+# sys.path.append('/bolao')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bolao.settings")
 
 application = get_wsgi_application()
