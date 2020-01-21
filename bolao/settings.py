@@ -5,11 +5,14 @@ import django_heroku
 import os
 LOCAL_INSTANCE = lambda *args: os.path.join(os.path.dirname(__file__), *args)
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 # django compressor settings
-COMPRESS_ENABLED = True
+COMPRESS_ENABLED = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -21,10 +24,10 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'bolao',
-        'USER': 'bolao',
-        'PASSWORD': 'bolao123',
-        'HOST': 'ventorim.ddns.net',
+        'NAME': os.environ['name'],
+        'USER': os.environ['user'],
+        'PASSWORD': os.environ['password'],
+        'HOST': os.environ['host'],
         'PORT': '5432',
     }
 }
@@ -85,7 +88,7 @@ STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = STATIC_URL + "grappelli/"
 
 # Grapelli Admin site Name
-GRAPPELLI_ADMIN_TITLE = 'Bolão de Futebol - NTI'
+GRAPPELLI_ADMIN_TITLE = 'Bolão de Futebol - STI'
 
 STATICFILES_DIRS = [
     LOCAL_INSTANCE('../media/')

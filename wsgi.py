@@ -20,7 +20,7 @@ import sys
 path = os.getcwd()
 sys.path.append(path)
 sys.path.append(path+'/bolao')
+print(path)
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bolao.settings")
 
 application = get_wsgi_application()
-# application = DjangoWhiteNoise(application)

@@ -128,4 +128,4 @@ static/
 .vscode/
 bolao_django.log
 bolao_gunicorn.log
-
+variables.env
